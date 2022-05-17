@@ -79,15 +79,13 @@ if __name__=="__main__":
     todo= clientsocket.recv(4096).decode()
     message, user, pwd, filen= todo.split(",")
 
-
-    if not addtolog(user,pwd):
-        clientsocket.sendall(f'user y pass no validos'.encode())
-    
-    else:
+    if addtolog(user,pwd):
         archivoc = cifradoArchivo(message)
         archivod= descifradoArchivo(archivoc)
         archivofi, llave= signatureArchivo(archivod)
         archivov = VerifySign(archivofi, llave)
+    else:
+        clientsocket.sendall(f'user y pass no validos'.encode())
     
     serversocket.close()
         
